@@ -30,6 +30,6 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: GameWidget(game: LetterToSantaGame()));
+    return Scaffold(body: GameWidget(game: LetterToSantaGame(), autofocus: true));
   }
 }

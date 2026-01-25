@@ -1,7 +1,10 @@
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:letter_to_santa/game/index.dart';
 
-class LetterToSantaGame extends FlameGame {
+class LetterToSantaGame extends FlameGame with KeyboardEvents {
   final ForestBackground forestBackground = ForestBackground();
   final ForestForeground forestForeground = ForestForeground();
   final Train train = Train();
@@ -10,7 +13,7 @@ class LetterToSantaGame extends FlameGame {
   double currentSpeed = 0;
   bool isMovingForward = false;
   bool isMovingBackward = false;
-  
+
   static const double maxSpeed = 300.0; // Максимальная скорость движения влево
   static const double minSpeed = -200.0; // Максимальная скорость движения вправо (назад)
   static const double acceleration = 500.0; // Ускорение
@@ -38,6 +41,26 @@ class LetterToSantaGame extends FlameGame {
   void stopMoving() {
     isMovingForward = false;
     isMovingBackward = false;
+  }
+
+  @override
+  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    // Проверяем нажатие стрелок
+    if (event is KeyDownEvent || event is KeyRepeatEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        startMovingForward(); // Стрелка влево - движение вперед
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        startMovingBackward(); // Стрелка вправо - движение назад
+        return KeyEventResult.handled;
+      }
+    } else if (event is KeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowLeft || event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        stopMoving(); // Отпустили стрелку - останавливаемся
+        return KeyEventResult.handled;
+      }
+    }
+    return KeyEventResult.ignored;
   }
 
   @override
