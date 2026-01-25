@@ -24,6 +24,8 @@ class ForestBackground extends ParallaxComponent<LetterToSantaGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    parallax?.baseVelocity = Vector2(game.currentSpeed / 10, 0);
+    // Инвертируем знак, т.к. parallax работает наоборот
+    // Положительная скорость игры -> отрицательная для parallax -> мир движется вправо
+    parallax?.baseVelocity = Vector2(-game.currentSpeed / 10, 0);
   }
 }

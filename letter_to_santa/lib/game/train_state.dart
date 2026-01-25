@@ -6,8 +6,9 @@ enum TrainState { running, idle }
 class Train extends SpriteGroupComponent<TrainState> with HasGameReference<LetterToSantaGame> {
   Train() : super(size: Vector2(1107 / 2, 505 / 2));
 
-  double get startXPosition => game.forestForeground.width + width;
-  double get groundYPosition => game.forestForeground.y - height + 428;
+  // Поезд стоит на месте в центре экрана (немного левее)
+  double get trainXPosition => game.size.x * 0.4;
+  double get groundYPosition => game.forestForeground.y - height + 70;
 
   @override
   void onLoad() {
@@ -22,7 +23,23 @@ class Train extends SpriteGroupComponent<TrainState> with HasGameReference<Lette
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    x = startXPosition;
+    x = trainXPosition;
+    y = groundYPosition;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    
+    // Обновляем состояние поезда в зависимости от скорости
+    if (game.currentSpeed != 0) {
+      current = TrainState.running;
+    } else {
+      current = TrainState.idle;
+    }
+    
+    // Поезд остается на месте, не двигается
+    x = trainXPosition;
     y = groundYPosition;
   }
 }
