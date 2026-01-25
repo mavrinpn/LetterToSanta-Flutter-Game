@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "name": "letter_to_santa",
+            "cwd": "letter_to_santa",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "letter_to_santa (profile mode)",
+            "cwd": "letter_to_santa",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "letter_to_santa (release mode)",
+            "cwd": "letter_to_santa",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

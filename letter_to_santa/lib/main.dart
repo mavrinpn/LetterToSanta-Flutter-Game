@@ -1,8 +1,14 @@
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import 'game/train_game.dart';
+import 'package:letter_to_santa/game/game.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Flame.device.fullScreen();
+  await Flame.device.setLandscape();
+
   runApp(const MyApp());
 }
 
@@ -24,6 +30,6 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: GameWidget<TrainGame>.controlled(gameFactory: TrainGame.new));
+    return Scaffold(body: GameWidget(game: LetterToSantaGame()));
   }
 }
