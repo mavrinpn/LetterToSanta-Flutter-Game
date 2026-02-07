@@ -10,6 +10,7 @@ class LetterToSantaGame extends FlameGame with KeyboardEvents {
   final Train train = Train();
   final ControlButtons controlButtons = ControlButtons();
   final MovementController movement = MovementController();
+  final GameHud hud = GameHud();
 
   /// Текущая скорость мира (делегируется к MovementController)
   double get currentSpeed => movement.currentSpeed;
@@ -28,6 +29,7 @@ class LetterToSantaGame extends FlameGame with KeyboardEvents {
     add(forestForeground);
     add(train);
     add(controlButtons);
+    add(hud);
   }
 
   @override

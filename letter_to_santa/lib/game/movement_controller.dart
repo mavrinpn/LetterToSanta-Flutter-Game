@@ -13,14 +13,27 @@ class MovementController extends Component with HasGameReference<LetterToSantaGa
   static const double _minSpeed = -0.25; // Максимальная скорость назад
   static const double _acceleration = 1.0; // Ускорение / замедление
 
+  /// Множитель для перевода нормализованной скорости в км/ч.
+  /// При _maxSpeed = 0.4 даёт максимум 80 км/ч.
+  static const double _speedScale = 200.0;
+
   /// Текущая скорость в нормализованных единицах
   double _speed = 0;
+
+  /// Пройденное расстояние в метрах
+  double _distanceMeters = 0;
 
   bool isMovingForward = false;
   bool isMovingBackward = false;
 
   /// Текущая скорость в пикселях/сек (для использования другими компонентами)
   double get currentSpeed => _speed * game.size.y;
+
+  /// Текущая скорость в км/ч (для отображения на HUD)
+  double get speedKmh => _speed.abs() * _speedScale;
+
+  /// Пройденное расстояние в метрах
+  double get distanceMeters => _distanceMeters;
 
   void startMovingForward() {
     isMovingForward = true;
@@ -40,6 +53,9 @@ class MovementController extends Component with HasGameReference<LetterToSantaGa
   @override
   void update(double dt) {
     super.update(dt);
+
+    // Накапливаем пройденное расстояние (м/с = км/ч / 3.6)
+    _distanceMeters += _speed.abs() * (_speedScale / 3.6) * dt;
 
     if (isMovingForward) {
       // Плавное ускорение вперед
