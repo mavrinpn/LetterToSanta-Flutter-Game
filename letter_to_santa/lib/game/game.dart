@@ -9,38 +9,25 @@ class LetterToSantaGame extends FlameGame with KeyboardEvents {
   final ForestForeground forestForeground = ForestForeground();
   final Train train = Train();
   final ControlButtons controlButtons = ControlButtons();
+  final MovementController movement = MovementController();
 
-  double currentSpeed = 0;
-  bool isMovingForward = false;
-  bool isMovingBackward = false;
+  /// Текущая скорость мира (делегируется к MovementController)
+  double get currentSpeed => movement.currentSpeed;
 
-  static const double maxSpeed = 300.0; // Максимальная скорость движения влево
-  static const double minSpeed = -200.0; // Максимальная скорость движения вправо (назад)
-  static const double acceleration = 500.0; // Ускорение
+  /// Удобные методы-делегаты для управления движением
+  void startMovingForward() => movement.startMovingForward();
+  void startMovingBackward() => movement.startMovingBackward();
+  void stopMoving() => movement.stopMoving();
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     await images.loadAllImages();
+    add(movement);
     add(forestBackground);
     add(forestForeground);
     add(train);
     add(controlButtons);
-  }
-
-  void startMovingForward() {
-    isMovingForward = true;
-    isMovingBackward = false;
-  }
-
-  void startMovingBackward() {
-    isMovingBackward = true;
-    isMovingForward = false;
-  }
-
-  void stopMoving() {
-    isMovingForward = false;
-    isMovingBackward = false;
   }
 
   @override
@@ -61,30 +48,5 @@ class LetterToSantaGame extends FlameGame with KeyboardEvents {
       }
     }
     return KeyEventResult.ignored;
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-
-    // Ускорение или замедление в зависимости от нажатых кнопок
-    if (isMovingForward) {
-      // Плавное ускорение вперед
-      currentSpeed += acceleration * dt;
-      if (currentSpeed > maxSpeed) currentSpeed = maxSpeed;
-    } else if (isMovingBackward) {
-      // Плавное ускорение назад
-      currentSpeed -= acceleration * dt;
-      if (currentSpeed < minSpeed) currentSpeed = minSpeed;
-    } else {
-      // Плавное замедление когда кнопки не нажаты
-      if (currentSpeed > 0) {
-        currentSpeed -= acceleration * dt;
-        if (currentSpeed < 0) currentSpeed = 0;
-      } else if (currentSpeed < 0) {
-        currentSpeed += acceleration * dt;
-        if (currentSpeed > 0) currentSpeed = 0;
-      }
-    }
   }
 }
