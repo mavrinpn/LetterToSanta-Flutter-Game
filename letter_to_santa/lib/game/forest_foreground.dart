@@ -5,7 +5,13 @@ import 'package:flame/components.dart';
 import 'package:letter_to_santa/game/game.dart';
 
 class ForestForeground extends PositionComponent with HasGameReference<LetterToSantaGame> {
-  static final blockSize = Vector2(1536 / 2, 272 / 2);
+  /// Доля высоты экрана, которую занимает полоса земли
+  static const double groundHeightFraction = 0.18;
+
+  /// Соотношение сторон блока земли (ширина / высота оригинальной картинки)
+  static const double _groundAspectRatio = 1536 / 272;
+
+  late Vector2 blockSize;
   late final Sprite groundBlock;
   // late final Sprite railsBlock;
   late final Queue<SpriteComponent> groundLayer;
@@ -23,6 +29,10 @@ class ForestForeground extends PositionComponent with HasGameReference<LetterToS
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
+
+    // Размер блока пропорционален высоте экрана
+    final groundHeight = size.y * groundHeightFraction;
+    blockSize = Vector2(groundHeight * _groundAspectRatio, groundHeight);
 
     // Очищаем старые блоки перед генерацией новых
     _clearLayer(groundLayer);

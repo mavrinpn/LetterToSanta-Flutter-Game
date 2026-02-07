@@ -4,11 +4,21 @@ import 'package:letter_to_santa/game/game.dart';
 enum TrainState { running, idle }
 
 class Train extends SpriteGroupComponent<TrainState> with HasGameReference<LetterToSantaGame> {
-  Train() : super(size: Vector2(1107 / 2, 505 / 2));
+  /// Доля высоты экрана, которую занимает поезд
+  static const double trainHeightFraction = 0.30;
+
+  /// Соотношение сторон спрайта поезда (ширина / высота оригинальной картинки)
+  static const double _trainAspectRatio = 1107 / 505;
+
+  /// Доля высоты поезда, на которую он «заходит» на землю (перекрытие колесами)
+  static const double _groundOverlapFraction = 0.31;
+
+  Train() : super(size: Vector2.zero());
 
   // Поезд стоит на месте в центре экрана (немного левее)
   double get trainXPosition => game.size.x * 0.4;
-  double get groundYPosition => game.forestForeground.y - height + 70;
+  double get groundYPosition =>
+      game.forestForeground.y - height * (1 - _groundOverlapFraction);
 
   @override
   void onLoad() {
@@ -23,6 +33,11 @@ class Train extends SpriteGroupComponent<TrainState> with HasGameReference<Lette
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
+
+    // Размер поезда пропорционален высоте экрана
+    final trainHeight = size.y * trainHeightFraction;
+    this.size = Vector2(trainHeight * _trainAspectRatio, trainHeight);
+
     x = trainXPosition;
     y = groundYPosition;
   }
