@@ -24,17 +24,28 @@ class ForestForeground extends PositionComponent with HasGameReference<LetterToS
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
 
+    // Очищаем старые блоки перед генерацией новых
+    _clearLayer(groundLayer);
+
     // Генерируем блоки земли
     final newGroundBlocks = _generateBlocks(groundBlock, -6);
     groundLayer.addAll(newGroundBlocks);
     addAll(newGroundBlocks);
 
     // Генерируем блоки рельсов
+    // _clearLayer(rails);
     // final newRailsBlocks = _generateBlocks(railsBlock, -5);
     // rails.addAll(newRailsBlocks);
     // addAll(newRailsBlocks);
 
     y = size.y - blockSize.y;
+  }
+
+  void _clearLayer(Queue<SpriteComponent> layer) {
+    for (final block in layer) {
+      remove(block);
+    }
+    layer.clear();
   }
 
   @override
