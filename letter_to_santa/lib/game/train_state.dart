@@ -1,9 +1,11 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:letter_to_santa/game/game.dart';
 
 enum TrainState { running, idle }
 
-class Train extends SpriteGroupComponent<TrainState> with HasGameReference<LetterToSantaGame> {
+class Train extends SpriteGroupComponent<TrainState>
+    with HasGameReference<LetterToSantaGame>, DragCallbacks {
   /// Доля высоты экрана, которую занимает поезд
   static const double trainHeightFraction = 0.30;
 
@@ -13,12 +15,21 @@ class Train extends SpriteGroupComponent<TrainState> with HasGameReference<Lette
   /// Доля высоты поезда, на которую он «заходит» на землю (перекрытие колесами)
   static const double _groundOverlapFraction = 0.215;
 
+  /// Отступ от краёв экрана при перетаскивании
+  static const double _dragPaddingFraction = 0.05;
+
   Train() : super(size: Vector2.zero());
 
-  // Поезд стоит на месте в центре экрана (немного левее)
+  /// Позиция по умолчанию (центр чуть левее)
   double get trainXPosition => game.size.x * 0.4;
   double get groundYPosition =>
       game.forestForeground.y - height * (1 - _groundOverlapFraction);
+
+  double get _minX => game.size.x * _dragPaddingFraction;
+  double get _maxX => game.size.x * (1 - _dragPaddingFraction) - width;
+
+  /// Ручная позиция при перетаскивании (null = использовать trainXPosition)
+  double? _manualX;
 
   @override
   void onLoad() {
@@ -38,23 +49,32 @@ class Train extends SpriteGroupComponent<TrainState> with HasGameReference<Lette
     final trainHeight = size.y * trainHeightFraction;
     this.size = Vector2(trainHeight * _trainAspectRatio, trainHeight);
 
-    x = trainXPosition;
+    // При ресайзе пересчитываем _manualX в границах
+    if (_manualX != null) {
+      _manualX = _manualX!.clamp(_minX, _maxX);
+    }
+    x = _manualX ?? trainXPosition;
     y = groundYPosition;
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    _manualX = (x + event.canvasDelta.x).clamp(_minX, _maxX);
+    x = _manualX!;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    
+
     // Обновляем состояние поезда в зависимости от скорости
     if (game.currentSpeed != 0) {
       current = TrainState.running;
     } else {
       current = TrainState.idle;
     }
-    
-    // Поезд остается на месте, не двигается
-    x = trainXPosition;
+
+    x = _manualX ?? trainXPosition;
     y = groundYPosition;
   }
 }
