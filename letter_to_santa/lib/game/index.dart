@@ -1,4 +1,6 @@
+export 'cloud_bg_background.dart';
 export 'control_buttons.dart';
+export 'drifting_clouds_background.dart';
 export 'forest_background.dart';
 export 'forest_foreground.dart';
 export 'game.dart';

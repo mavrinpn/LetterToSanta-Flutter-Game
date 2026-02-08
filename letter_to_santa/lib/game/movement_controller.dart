@@ -9,8 +9,8 @@ import 'package:letter_to_santa/game/game.dart';
 /// На экранах разных пропорций визуальная скорость будет одинаковой.
 class MovementController extends Component with HasGameReference<LetterToSantaGame> {
   // Нормализованные константы (доли высоты экрана в секунду)
-  static const double _maxSpeed = 1.4; // Максимальная скорость вперед
-  static const double _minSpeed = -1.25; // Максимальная скорость назад
+  static const double _maxSpeed = 0.4; // Максимальная скорость вперед
+  static const double _minSpeed = -0.25; // Максимальная скорость назад
   static const double _acceleration = 1.0; // Ускорение / замедление
 
   /// Множитель для перевода нормализованной скорости в км/ч.

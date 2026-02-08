@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:letter_to_santa/game/index.dart';
 
 class LetterToSantaGame extends FlameGame with KeyboardEvents {
+  final CloudBgBackground cloudBgBackground = CloudBgBackground();
+  final DriftingCloudsBackground driftingCloudsBackground = DriftingCloudsBackground();
   final ForestBackground forestBackground = ForestBackground();
   final ForestForeground forestForeground = ForestForeground();
   final Train train = Train();
@@ -25,6 +27,8 @@ class LetterToSantaGame extends FlameGame with KeyboardEvents {
     await super.onLoad();
     await images.loadAllImages();
     add(movement);
+    add(cloudBgBackground);
+    add(driftingCloudsBackground);
     add(forestBackground);
     add(forestForeground);
     add(train);
