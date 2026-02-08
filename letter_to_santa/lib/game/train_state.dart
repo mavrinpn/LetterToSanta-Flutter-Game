@@ -11,7 +11,7 @@ class Train extends SpriteGroupComponent<TrainState> with HasGameReference<Lette
   static const double _trainAspectRatio = 1107 / 505;
 
   /// Доля высоты поезда, на которую он «заходит» на землю (перекрытие колесами)
-  static const double _groundOverlapFraction = 0.31;
+  static const double _groundOverlapFraction = 0.215;
 
   Train() : super(size: Vector2.zero());
 
